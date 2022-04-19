@@ -68,6 +68,10 @@ def train(config, train_loader, model, criterion, optimizer, lr_scheduler, epoch
         output, jac_loss, _ = model(input, train_step=(lr_scheduler._step_count-1), 
                                     compute_jac_loss=compute_jac_loss,
                                     f_thres=f_thres, b_thres=b_thres, writer=writer)
+        
+        print("OUTPUT SHAPE")
+        print(output.shape)
+        print("END OF OUTPUT SHAPE")
         target = target.cuda(non_blocking=True)
         loss = criterion(output, target)
         jac_loss = jac_loss.mean()
