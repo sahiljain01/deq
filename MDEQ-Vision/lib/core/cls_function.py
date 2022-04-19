@@ -36,6 +36,8 @@ def train(config, train_loader, model, criterion, optimizer, lr_scheduler, epoch
     # switch to train mode
     model.train()
 
+    memory_printed = False
+
     end = time.time()
     total_batch_num = len(train_loader)
     effec_batch_num = int(config.PERCENT * total_batch_num)
@@ -72,6 +74,12 @@ def train(config, train_loader, model, criterion, optimizer, lr_scheduler, epoch
 
         # compute gradient and do update step
         optimizer.zero_grad()
+        if not memory_printed:
+            print("MEMORY ALLOCATION DUE TO FRICTION")
+            print(torch.cuda.memory_allocated())
+            print("END OF MEMORY ALLOCATION DUE TO FRICTION")
+            memory_printed = True
+
         if factor > 0:
             (loss + factor*jac_loss).backward()
         else:

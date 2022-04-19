@@ -1,8 +1,8 @@
-GPUS: (0,1)
+GPUS: (0,)
 LOG_DIR: 'log/'
 DATA_DIR: ''
 OUTPUT_DIR: 'output/'
-WORKERS: 2
+WORKERS: 1
 PRINT_FREQ: 100
 
 MODEL: 
@@ -38,8 +38,8 @@ MODEL:
       - 24
       FUSE_METHOD: SUM
 DEQ:
-  F_SOLVER: 'broyden'
-  B_SOLVER: 'broyden'
+  F_SOLVER: 'anderson'
+  B_SOLVER: 'anderson'
   STOP_MODE: 'rel'
   F_THRES: 18
   B_THRES: 20
@@ -61,12 +61,12 @@ TEST:
   BATCH_SIZE_PER_GPU: 32
   MODEL_FILE: ''
 TRAIN:
-  BATCH_SIZE_PER_GPU: 64
+  BATCH_SIZE_PER_GPU: 32
   BEGIN_EPOCH: 0
-  END_EPOCH: 50
+  END_EPOCH: 10
   RESUME: false
   LR_SCHEDULER: 'cosine'
-  PRETRAIN_STEPS: 3000
+  PRETRAIN_STEPS: 0
   LR_FACTOR: 0.1
   LR_STEP:
   - 30
