@@ -41,6 +41,9 @@ def train(config, train_loader, model, criterion, optimizer, lr_scheduler, epoch
     end = time.time()
     total_batch_num = len(train_loader)
     effec_batch_num = int(config.PERCENT * total_batch_num)
+    total = 0.0
+    correct = 0.0
+
     for i, (input, target) in enumerate(train_loader):
         # train on partial training data
         if i >= effec_batch_num: break
@@ -68,6 +71,12 @@ def train(config, train_loader, model, criterion, optimizer, lr_scheduler, epoch
         output, jac_loss, _ = model(input, train_step=(lr_scheduler._step_count-1), 
                                     compute_jac_loss=compute_jac_loss,
                                     f_thres=f_thres, b_thres=b_thres, writer=writer)
+
+        outputs = torch.sigmoid(output).detach().cpu().numpy()
+        ground_truth_outputs = target.detach().cpu().numpy()
+        predicted = np.round(outputs)
+        total += (85 * 32)
+        correct += (predicted == y.detach().cpu().numpy()).sum().item()
         
         # print("OUTPUT SHAPE")
         # print(output.shape)
@@ -123,6 +132,7 @@ def train(config, train_loader, model, criterion, optimizer, lr_scheduler, epoch
                       speed=input.size(0)/batch_time.avg,
                       data_time=data_time, loss=losses, jac_losses=jac_losses, factor=factor, top1=top1)
             logger.info(msg)
+            logger.info(f"ACCURACY: {correct / total}")
             
         global_steps += 1
         writer_dict['train_global_steps'] = global_steps
