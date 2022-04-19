@@ -53,7 +53,7 @@ class AnimalsWithAttributesDataset(Dataset):
     if self.transform:
       image = self.transform(image)
 
-    return (torch.FloatTensor(torch.from_numpy(image)), torch.FloatTensor(torch.from_numpy(label)))
+    return ((torch.from_numpy(image)), (torch.from_numpy(label)))
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Train classification network')
