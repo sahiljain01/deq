@@ -186,7 +186,6 @@ def main():
 
         train_dataset = AnimalsWithAttributesDataset(images=imgs, attributes=attrs, transform=transform_train)
         valid_dataset = AnimalsWithAttributesDataset(images=imgs_test, attributes=attrs_test, transform=transform_valid)
-
     if dataset_name == 'imagenet':
         traindir = os.path.join(config.DATASET.ROOT+'/images', config.DATASET.TRAIN_SET)
         valdir = os.path.join(config.DATASET.ROOT+'/images', config.DATASET.TEST_SET)
@@ -205,7 +204,7 @@ def main():
         ])
         train_dataset = datasets.ImageFolder(traindir, transform_train)
         valid_dataset = datasets.ImageFolder(valdir, transform_valid)
-    else:
+    elif:
         assert dataset_name == "cifar10", "Only CIFAR-10 and ImageNet are supported at this phase"
         classes = ('plane', 'car', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck')  # For reference
         
