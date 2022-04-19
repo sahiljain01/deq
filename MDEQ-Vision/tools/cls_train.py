@@ -20,6 +20,7 @@ import torch.utils.data.distributed
 import torchvision.datasets as datasets
 import torchvision.transforms as transforms
 from torch.utils.tensorboard import SummaryWriter
+from torch.utils.data import Dataset
 
 import _init_paths
 import models
