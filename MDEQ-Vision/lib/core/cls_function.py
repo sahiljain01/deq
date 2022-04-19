@@ -76,7 +76,7 @@ def train(config, train_loader, model, criterion, optimizer, lr_scheduler, epoch
         ground_truth_outputs = target.detach().cpu().numpy()
         predicted = np.round(outputs)
         total += (85 * 32)
-        correct += (predicted == y.detach().cpu().numpy()).sum().item()
+        correct += (predicted == ground_truth_outputs).sum().item()
         
         # print("OUTPUT SHAPE")
         # print(output.shape)
