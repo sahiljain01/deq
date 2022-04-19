@@ -53,7 +53,7 @@ class AnimalsWithAttributesDataset(Dataset):
     if self.transform:
       image = self.transform(image)
 
-    print(image.type())
+    image = image.to(torch.float)
 
     return (image, (torch.from_numpy(label)))
 
