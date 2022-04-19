@@ -9,6 +9,7 @@ import os
 import pprint
 import shutil
 import sys
+import pdb
 
 import torch
 import torch.nn as nn
@@ -90,6 +91,8 @@ def main():
     
     model = eval('models.'+config.MODEL.NAME+'.get_cls_net')(config).cuda()
     
+    pdb.set_trace()
+
     if config.TRAIN.MODEL_FILE:
         model.load_state_dict(torch.load(config.TRAIN.MODEL_FILE))
         logger.info(colored('=> loading model from {}'.format(config.TRAIN.MODEL_FILE), 'red'))
