@@ -118,12 +118,10 @@ def train(config, train_loader, model, criterion, optimizer, lr_scheduler, epoch
                   'Data {data_time.avg:.3f}s\t' \
                   'Loss {loss.avg:.5f}\t' \
                   'Jac (gamma) {jac_losses.avg:.4f} ({factor:.4f})\t' \
-                  'Acc@1 {top1.avg:.3f}\t'.format(
+                  'Acc@1'.format(
                       epoch, i, effec_batch_num, global_steps, batch_time=batch_time,
                       speed=input.size(0)/batch_time.avg,
                       data_time=data_time, loss=losses, jac_losses=jac_losses, factor=factor, top1=top1)
-            if 5 in topk:
-                msg += 'Acc@5 {top5.avg:.3f}\t'.format(top5=top5)
             logger.info(msg)
             
         global_steps += 1
@@ -181,15 +179,15 @@ def validate(config, val_loader, model, criterion, lr_scheduler, epoch, output_d
         logger.info(f"Spectral radius over validation set: {sradiuses.avg}")    
     msg = 'Test: Time {batch_time.avg:.3f}\t' \
             'Loss {loss.avg:.4f}\t' \
-            'Acc@1 {top1.avg:.3f}\t'.format(
+            'Acc@1\t'.format(
                 batch_time=batch_time, loss=losses, top1=top1)
     if 5 in topk:
-        msg += 'Acc@5 {top5.avg:.3f}\t'.format(top5=top5)
+        msg += 'Acc@5\t'.format(top5=top5)
     logger.info(msg)
 
-    if writer:
-        writer.add_scalar('accuracy/valid_top1', top1.avg, epoch)
-        if spectral_radius_mode:
-            writer.add_scalar('stability/sradius', sradiuses.avg, epoch)
+    # if writer:
+    #     writer.add_scalar('accuracy/valid_top1', top1.avg, epoch)
+    #     if spectral_radius_mode:
+    #         writer.add_scalar('stability/sradius', sradiuses.avg, epoch)
 
-    return top1.avg
+    return 0.0
