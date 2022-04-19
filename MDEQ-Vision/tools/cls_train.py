@@ -32,6 +32,26 @@ from utils.utils import save_checkpoint
 from utils.utils import create_logger
 from termcolor import colored
 
+class AnimalsWithAttributesDataset(Dataset):
+  def __init__(self, images, attributes, transform=None):
+    self.images = images
+    self.attributes = attributes
+    self.transform = transform
+
+  def __len__(self):
+    return len(self.images)
+
+  def __getitem__(self, idx):
+    if torch.is_tensor(idx):
+      idx = idx.tolist()
+
+    image = self.images[idx]
+    label = self.attributes[idx]
+
+    if self.transform:
+      image = self.transform(image)
+
+    return (image, label)
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Train classification network')
@@ -112,7 +132,7 @@ def main():
     print("Finished constructing model!")
 
     # define loss function (criterion) and optimizer
-    criterion = nn.CrossEntropyLoss().cuda()
+    criterion = nn.BCEWithLogitsLoss().cuda()
     optimizer = get_optimizer(config, model)
     lr_scheduler = None
 
@@ -140,6 +160,30 @@ def main():
    
     # Data loading code
     dataset_name = config.DATASET.DATASET
+
+    if dataset_name == 'awa':
+        normalize = transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010))
+        augment_list = [transforms.RandomCrop(32, padding=4), transforms.RandomHorizontalFlip()] if config.DATASET.AUGMENT else []
+        transform_train = transforms.Compose(augment_list + [
+            transforms.ToTensor(),
+            normalize,
+        ])
+        transform_valid = transforms.Compose([
+            transforms.ToTensor(),
+            normalize,
+        ])
+        imgs, attrs, imgs_test, attrs_test = None, None, None, None
+        with open('data/awa/images_train_32.npy', 'rb') as f:
+            imgs = np.load(f)
+        with open('data/awa/images_test_32.npy', 'rb') as f:
+            imgs_test = np.load(f)
+        with open('data/awa/abs_32.npy', 'rb') as f:
+            attrs = np.load(f)
+        with open('data/awa/abs_test_32.npy', 'rb') as f:
+            attrs_test = np.load(f)
+
+        train_dataset = AnimalsWithAttributesDataset(images=imgs, attributes=attrs, transform=transform_train)
+        valid_dataset = AnimalsWithAttributesDataset(images=imgs_test, attributes=attrs_test, transform=transform_valid)
 
     if dataset_name == 'imagenet':
         traindir = os.path.join(config.DATASET.ROOT+'/images', config.DATASET.TRAIN_SET)
@@ -176,6 +220,7 @@ def main():
         train_dataset = datasets.CIFAR10(root=f'{config.DATASET.ROOT}', train=True, download=True, transform=transform_train)
         valid_dataset = datasets.CIFAR10(root=f'{config.DATASET.ROOT}', train=False, download=True, transform=transform_valid)
         
+    
     train_loader = torch.utils.data.DataLoader(
         train_dataset,
         batch_size=config.TRAIN.BATCH_SIZE_PER_GPU*len(gpus),
