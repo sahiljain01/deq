@@ -51,11 +51,7 @@ CUDNN:
 LOSS:
   JAC_LOSS_WEIGHT: 0.0
 DATASET:
-  DATASET: 'cifar10'
-  DATA_FORMAT: 'jpg'
-  ROOT: 'data/cifar10/'
-  TEST_SET: 'val'
-  TRAIN_SET: 'train'
+  DATASET: 'awa'
   AUGMENT: False
 TEST:
   BATCH_SIZE_PER_GPU: 32

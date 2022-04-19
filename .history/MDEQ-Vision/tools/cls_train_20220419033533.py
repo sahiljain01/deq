@@ -53,8 +53,6 @@ class AnimalsWithAttributesDataset(Dataset):
     if self.transform:
       image = self.transform(image)
 
-    image = image.float()
-    label = label.float()
     return (image, label)
 
 def parse_args():
@@ -179,16 +177,12 @@ def main():
         imgs, attrs, imgs_test, attrs_test = None, None, None, None
         with open('data/awa/images_train_32.npy', 'rb') as f:
             imgs = np.load(f)
-            imgs = imgs.astype('float')
         with open('data/awa/images_test_32.npy', 'rb') as f:
             imgs_test = np.load(f)
-            imgs_test = imgs_test.astype('float')
         with open('data/awa/abs_32.npy', 'rb') as f:
             attrs = np.load(f)
-            attrs = attrs.astype('float')
         with open('data/awa/abs_test_32.npy', 'rb') as f:
             attrs_test = np.load(f)
-            attrs_test = attrs_test.astype('float')
 
         train_dataset = AnimalsWithAttributesDataset(images=imgs, attributes=attrs, transform=transform_train)
         valid_dataset = AnimalsWithAttributesDataset(images=imgs_test, attributes=attrs_test, transform=transform_valid)

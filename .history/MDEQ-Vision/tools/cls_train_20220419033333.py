@@ -53,8 +53,6 @@ class AnimalsWithAttributesDataset(Dataset):
     if self.transform:
       image = self.transform(image)
 
-    image = image.float()
-    label = label.float()
     return (image, label)
 
 def parse_args():
@@ -179,20 +177,17 @@ def main():
         imgs, attrs, imgs_test, attrs_test = None, None, None, None
         with open('data/awa/images_train_32.npy', 'rb') as f:
             imgs = np.load(f)
-            imgs = imgs.astype('float')
         with open('data/awa/images_test_32.npy', 'rb') as f:
             imgs_test = np.load(f)
-            imgs_test = imgs_test.astype('float')
         with open('data/awa/abs_32.npy', 'rb') as f:
             attrs = np.load(f)
-            attrs = attrs.astype('float')
         with open('data/awa/abs_test_32.npy', 'rb') as f:
             attrs_test = np.load(f)
-            attrs_test = attrs_test.astype('float')
 
         train_dataset = AnimalsWithAttributesDataset(images=imgs, attributes=attrs, transform=transform_train)
         valid_dataset = AnimalsWithAttributesDataset(images=imgs_test, attributes=attrs_test, transform=transform_valid)
-    elif dataset_name == 'imagenet':
+
+    if dataset_name == 'imagenet':
         traindir = os.path.join(config.DATASET.ROOT+'/images', config.DATASET.TRAIN_SET)
         valdir = os.path.join(config.DATASET.ROOT+'/images', config.DATASET.TEST_SET)
         normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
