@@ -38,8 +38,8 @@ MODEL:
       - 24
       FUSE_METHOD: SUM
 DEQ:
-  F_SOLVER: 'anderson'
-  B_SOLVER: 'anderson'
+  F_SOLVER: 'broyden'
+  B_SOLVER: 'broyden'
   STOP_MODE: 'rel'
   F_THRES: 18
   B_THRES: 20
@@ -63,7 +63,7 @@ TEST:
 TRAIN:
   BATCH_SIZE_PER_GPU: 32
   BEGIN_EPOCH: 0
-  END_EPOCH: 10
+  END_EPOCH: 1
   RESUME: false
   LR_SCHEDULER: 'cosine'
   PRETRAIN_STEPS: 0
