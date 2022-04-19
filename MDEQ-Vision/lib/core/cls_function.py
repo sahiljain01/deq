@@ -155,6 +155,9 @@ def validate(config, val_loader, model, criterion, lr_scheduler, epoch, output_d
     # switch to evaluate mode
     model.eval()
 
+    correct = 0.0
+    total = 0.0
+
     with torch.no_grad():
         end = time.time()
         # tk0 = tqdm(enumerate(val_loader), total=len(val_loader), position=0, leave=True)
@@ -166,6 +169,12 @@ def validate(config, val_loader, model, criterion, lr_scheduler, epoch, output_d
                                  writer=writer)
             target = target.cuda(non_blocking=True)
             loss = criterion(output, target)
+
+            outputs = torch.sigmoid(output).detach().cpu().numpy()
+            ground_truth_outputs = target.detach().cpu().numpy()
+            predicted = np.round(outputs)
+            total += (85 * 32)
+            correct += (predicted == ground_truth_outputs).sum().item()
 
             # measure accuracy and record loss
             losses.update(loss.item(), input.size(0))
@@ -194,6 +203,7 @@ def validate(config, val_loader, model, criterion, lr_scheduler, epoch, output_d
     if 5 in topk:
         msg += 'Acc@5\t'.format(top5=top5)
     logger.info(msg)
+    logger.info(f"ACCURACY: {correct / total}")
 
     # if writer:
     #     writer.add_scalar('accuracy/valid_top1', top1.avg, epoch)
