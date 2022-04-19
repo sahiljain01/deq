@@ -9,6 +9,7 @@ import os
 import pprint
 import shutil
 import sys
+import numpy as np
 
 import torch
 import torch.nn as nn
