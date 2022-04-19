@@ -53,6 +53,8 @@ class AnimalsWithAttributesDataset(Dataset):
     if self.transform:
       image = self.transform(image)
 
+    print(type(image))
+    print(type(label))
     return ((torch.from_numpy(image)), (torch.from_numpy(label)))
 
 def parse_args():
