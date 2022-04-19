@@ -179,7 +179,7 @@ def main():
     train_loader = torch.utils.data.DataLoader(
         train_dataset,
         batch_size=config.TRAIN.BATCH_SIZE_PER_GPU*len(gpus),
-        shuffle=True,
+        shuffle=False,
         num_workers=config.WORKERS,
         pin_memory=True
     )
