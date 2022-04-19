@@ -99,9 +99,13 @@ def train(config, train_loader, model, criterion, optimizer, lr_scheduler, epoch
         if compute_jac_loss:
             jac_losses.update(jac_loss.item(), input.size(0))
 
-        prec1, prec5 = accuracy(output, target, topk=topk)
-        top1.update(prec1[0], input.size(0))
-        top5.update(prec5[0], input.size(0))
+        prec1 = None
+        prec5 = None
+        top1 = None
+        top5 = None 
+        # prec1, prec5 = accuracy(output, target, topk=topk)
+        # top1.update(prec1[0], input.size(0))
+        # top5.update(prec5[0], input.size(0))
 
         # measure elapsed time
         batch_time.update(time.time() - end)
@@ -157,9 +161,13 @@ def validate(config, val_loader, model, criterion, lr_scheduler, epoch, output_d
 
             # measure accuracy and record loss
             losses.update(loss.item(), input.size(0))
-            prec1, prec5 = accuracy(output, target, topk=topk)
-            top1.update(prec1[0], input.size(0))
-            top5.update(prec5[0], input.size(0))
+            # prec1, prec5 = accuracy(output, target, topk=topk)
+            # top1.update(prec1[0], input.size(0))
+            # top5.update(prec5[0], input.size(0))
+            prec1 = None
+            prec5 = None
+            top1 = None
+            top5 = None 
 
             if spectral_radius_mode:
                 sradius = sradius.mean()
